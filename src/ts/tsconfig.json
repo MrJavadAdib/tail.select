@@ -1,0 +1,17 @@
+{
+    "compilerOptions": {
+        "allowJs": true,
+        "alwaysStrict": true,
+        "lib": ["dom", "es5", "es6"],
+        "locale": "en",
+        "outDir": "../../dist/js/",
+        "outFile": "../../dist/js/tail.select.js",
+        "module": "AMD",
+        "removeComments": false,
+        "sourceMap": true,
+        "target": "es5"
+    },
+    "files": [
+        "select.ts"
+    ]
+}

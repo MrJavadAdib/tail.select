@@ -1,0 +1,19 @@
+{
+    "author":       "Noxludio",
+    "author_url":   "https://www.github.com/noxludio",
+
+    "strings": {
+        "buttonAll":        "Tümü",
+        "buttonNone":       "Hiçbiri",
+        "disabled":         "Bu Alan kullanılamaz",
+        "empty":            "Seçenek yok",
+        "multiple":         null,
+        "multipleCount":    "En fazla [0] Seçenek seçin...",
+        "multipleLimit":    "Daha fazla Seçenek seçemezsiniz...",
+        "multipleList":     null,
+        "search":           "Aramak için yazın...",
+        "searchEmpty":      "Seçenek bulunamadı",
+        "single":           "Bir Seçenek seçin..."
+    },
+    "strings_url":  "https://github.com/pytesNET/tail.select/pull/35"
+}

@@ -1,0 +1,19 @@
+{
+    "author":       "Igor",
+    "author_url":   "https://www.github.com/igorcm",
+
+    "strings": {
+        "buttonAll":        "Todas",
+        "buttonNone":       "Nenhuma",
+        "disabled":         "Campo desativado",
+        "empty":            "Nenhuma opção disponível",
+        "multiple":         null,
+        "multipleCount":    "Escolha até: [0] opção(ões)...",
+        "multipleLimit":    "Não é possível selecionar outra opção...",
+        "multipleList":     null,
+        "search":           "Buscar...",
+        "searchEmpty":      "Nenhuma opção encontrada",
+        "single":           "Escolha uma opção..."
+    },
+    "strings_url":  "https://github.com/pytesNET/tail.select/pull/34"
+}

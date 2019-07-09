@@ -1,0 +1,19 @@
+{
+    "author":       "WoxVold",
+    "author_url":   "https://www.github.com/woxvold",
+
+    "strings": {
+        "buttonAll":        "Alle",
+        "buttonNone":       "Ingen",
+        "disabled":         "Dette feltet er deaktivert",
+        "empty":            "Ingen valg tilgjengelig",
+        "multiple":         null,
+        "multipleCount":    "Velg opptil [0]...",
+        "multipleLimit":    "Du kan ikke velge flere...",
+        "multipleList":     null,
+        "search":           "Søk...",
+        "searchEmpty":      "Ingen valg funnet",
+        "single":           "Velg..."
+    },
+    "strings_url":  "https://github.com/pytesNET/tail.select/issues/45"
+}

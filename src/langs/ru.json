@@ -1,0 +1,25 @@
+{
+    "author":       "Roman Yepanchenko",
+    "author_url":   "https://www.github.com/tizis",
+
+    "strings": {
+        "buttonAll":        "Все",
+        "buttonNone":       "Ничего",
+        "disabled":         "Поле отключено",
+        "empty":            "Нет доступных вариантов Optionen verfügbar",
+        "multiple":         null,
+        "multipleCount":    [
+            "function(args){",
+            "    var strings = ['варианта', 'вариантов', 'вариантов'], cases = [2, 0, 1, 1, 1, 2], num = args['[0]'];",
+            "    var string = strings[(num%100 > 4 && num%100 < 20)? 2: cases[(num%10 < 5)? num%10: 5]];",
+            "    return 'Выбор до [0] ' + string + ' ...';'",
+            "}"
+        ],
+        "multipleLimit":    "Вы не можете выбрать больше вариантов...",
+        "multipleList":     null,
+        "search":           "Начните набирать для поиска...",
+        "searchEmpty":      "Ничего не найдено",
+        "single":           "Выберите вариант..."
+    },
+    "strings_url":  "https://github.com/pytesNET/tail.select/issues/38"
+}

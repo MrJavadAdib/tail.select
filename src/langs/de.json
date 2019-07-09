@@ -1,0 +1,19 @@
+{
+    "author":       "SamBrishes",
+    "author_url":   "https://www.github.com/SamBrishes",
+
+    "strings": {
+        "buttonAll":        "Alle",
+        "buttonNone":       "Keine",
+        "disabled":         "Dieses Feld ist deaktiviert",
+        "empty":            "Keine Optionen verfügbar",
+        "multiple":         "Wähle eine oder mehrere Optionen...",
+        "multipleCount":    "Wähle bis zu [0] Optionen...",
+        "multipleLimit":    "Keine weiteren Optionen auswählbar...",
+        "multipleList":     "[0] Optionen ausgewählt...",
+        "search":           "Tippe zum suchen...",
+        "searchEmpty":      "Keine Optionen gefunden",
+        "single":           "Wähle eine Option..."
+    },
+    "strings_url":  "<internal>"
+}

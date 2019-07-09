@@ -1,0 +1,19 @@
+{
+    "author":       "elPesecillo",
+    "author_url":   "https://www.github.com/elPesecillo",
+
+    "strings": {
+        "buttonAll":        "Todos",
+        "buttonNone":       "Ninguno",
+        "disabled":         "Este campo esta deshabilitado",
+        "empty":            "No hay opciones disponibles",
+        "multiple":         null,
+        "multipleCount":    "Selecciona hasta [0] de opciones...",
+        "multipleLimit":    "No puedes seleccionar mas opciones...",
+        "multipleList":     null,
+        "search":           "Escribe dentro para buscar...",
+        "searchEmpty":      "No se encontraron opciones",
+        "single":           "Selecciona una opción..."
+    },
+    "strings_url":  "https://github.com/pytesNET/tail.select/issues/41"
+}
