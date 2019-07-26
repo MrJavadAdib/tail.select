@@ -51,33 +51,34 @@ const cminified = `/* pytesNET/${package.name} v${package.version} | {version} |
 /*
  |  JAVASCRIPT FILE
  */
-const fileES5 = `;(function(root, factory){
-    if(typeof define === "function" && define.amd){
-        define(function(){ return factory(root, root.document); });
-    } else if(typeof module === "object" && module.exports){
+const fileES5 = `;(function(root, factory) {
+    if(typeof define === "function" && define.amd) {
+        define(function() { return factory(root, root.document); });
+    } else if(typeof module === "object" && module.exports) {
         module.exports = factory(root, root.document);
     } else {
-        if(typeof root.tail === "undefined"){
-            root.tail = {};
+        if(typeof root.tail === "undefined") {
+            root.tail = { };
         }
-        root.${package.name} = {};
+        root.${package.name} = factory(root, root.document);
 
         // jQuery Support
-        if(typeof jQuery !== "undefined"){
-            jQuery.fn.${package.jquery} = function(o){
+        if(typeof jQuery !== "undefined") {
+            jQuery.fn.${package.jquery} = function(o) {
                 var r = [], i;
-                this.each(function(){ if((i = ${package.name}(this, o)) !== false){ r.push(i); } });
+                this.each(function() { if((i = ${package.name}(this, o)) !== false) { r.push(i); } });
                 return (r.length === 1)? r[0]: (r.length === 0)? false: r;
             };
         }
 
         // MooTools Support
-        if(typeof(MooTools) != "undefined"){
-            Element.implement({ ${package.mootools}: function(o){ return new ${package.name}(this, o); } });
+        if(typeof(MooTools) !== "undefined") {
+            Element.implement({ ${package.mootools}: function(o) { return new ${package.name}(this, o); } });
         }
     }
-}(window, function(w, d){
+}(window, function(w, d) {
 {code}
+    return Select;
 }));`;
 
 /*
@@ -138,10 +139,20 @@ function readConfig(filename){
  */
 function compileTS(){
     let config = readConfig("ts/tsconfig.json");
+    let host = ts.createCompilerHost(config.options);
+    let sourceFile = host.getSourceFile;
 
     // ES5 JavaScript
     (function(config){
-        let program = ts.createProgram(config.fileNames, config.options);
+        host.getSourceFile = function(filename) {
+            if(filename === "ts/options.ts"){
+                let file = fs.readFileSync("./ts/options.ts").toString();
+                file = file.replace(/[ ]+\/\/\/\@ts\-target\:ES6\s+([\s\S]*)\/\/\/\@ts\-target\:ES6/gm, "");
+                return ts.createSourceFile(filename, file, ts.ScriptTarget.ES5, true);
+            }
+            return sourceFile.call(host, filename);
+        }
+        let program = ts.createProgram(config.fileNames, config.options, host);
         let emitResult = program.emit();
         report(ts.getPreEmitDiagnostics(program).concat(emitResult.diagnostics));
         if(emitResult.emitSkipped){
@@ -153,7 +164,15 @@ function compileTS(){
     config.options.target = 2;
     config.options.outFile = "../dist/js/tail.select-es6.js";
     (function(config){
-        let program = ts.createProgram(config.fileNames, config.options);
+        host.getSourceFile = function(filename) {
+            if(filename === "ts/options.ts"){
+                let file = fs.readFileSync("./ts/options.ts").toString();
+                file = file.replace(/[ ]+\/\/\/\@ts\-target\:ES5\s+([\s\S]*)\/\/\/\@ts\-target\:ES5/gm, "");
+                return ts.createSourceFile(filename, file, ts.ScriptTarget.ES2015, true);
+            }
+            return sourceFile.call(host, filename);
+        }
+        let program = ts.createProgram(config.fileNames, config.options, host);
         let emitResult = program.emit();
         report(ts.getPreEmitDiagnostics(program).concat(emitResult.diagnostics));
         if(emitResult.emitSkipped){
@@ -179,19 +198,22 @@ function handleTS(file){
         }
 
         // Prepare Code
-        let code = data.split("\n").filter((l) => { return l.startsWith("/// <")? false: true; });
+        let code = data.split("\n").filter((l) => { 
+            return l.startsWith("/// <") || l.trim().startsWith("///@")? false: true; 
+        });
         let source = code.pop();
 
         // Prepare Content
         content = cheader.replace("{path}", realpath).replace("{file}", realfile)
                 + "\n" + content.replace("{code}", code.map((l) => { 
-                    if(l.startsWith("/*")){
-                        return "\n    /*";
+                    if(/(^|(    )+)\/(\/|\*)/.test(l)){
+                        return "\n    " + l;
+                    }
+                    if(/(^|\s+)\S+\/\//.test(l)){
+                        l = l.split("//")[0];
                     }
                     return (l == "//" || l == "//\r")? "": "    " + l; 
-                }).join("\n")) + "\n" + source;
-
-                
+                }).join("\n")).replace(/\}\s+(else)/gm, "} else") + "\n" + source;
 
         // Minify
         let result = (filename == "tail.select-es6"? minifyES6: minifyES5).minify(content, {
