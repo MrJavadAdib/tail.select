@@ -84,7 +84,7 @@ const fileES5 = `;(function(root, factory) {
 /*
  |  ECMASCRIPT FILE
  */
-const fileES6 = `let { select, options } = (function(root){
+const fileES6 = `let { select, options } = (function(root) {
 {code}
     return {select: select, options: options};
 })(window || this);
@@ -103,10 +103,10 @@ const fileLess = `@charset "UTF-8";`
 /*
  |  TYPESCRIPT :: REPORTER
  */
-function report(diagnostics){
+function report(diagnostics) {
     diagnostics.forEach((diagnostic) => {
         let message = "Error";
-        if(diagnostic.file){
+        if(diagnostic.file) {
             let { line, character } = diagnostic.file.getLineAndCharacterOfPosition(diagnostic.start)
         }
         message += ": " + ts.flattenDiagnosticMessageText(diagnostic.messageText, "\n");
@@ -117,17 +117,17 @@ function report(diagnostics){
 /*
  |  TYPESCRIPT :: CONFIG PARSER
  */
-function readConfig(filename){
+function readConfig(filename) {
     const filein = fs.readFileSync(filename).toString();
     const result = ts.parseConfigFileTextToJson(filename, filein);
     const config = result.config;
-    if(!config){
+    if(!config) {
         report([result.error]);
         process.exit(1);
     }
 
     const parse = ts.parseJsonConfigFileContent(config, ts.sys, path.dirname(filename));
-    if(parse.errors.length > 0){
+    if(parse.errors.length > 0) {
         report(parse.errors);
         process.exit(1);
     }
@@ -137,15 +137,15 @@ function readConfig(filename){
 /*
  |  TYPESCRIPT :: COMPILER
  */
-function compileTS(){
+function compileTS() { 
     let config = readConfig("ts/tsconfig.json");
     let host = ts.createCompilerHost(config.options);
     let sourceFile = host.getSourceFile;
 
     // ES5 JavaScript
-    (function(config){
+    (function(config) {
         host.getSourceFile = function(filename) {
-            if(filename === "ts/options.ts"){
+            if(filename === "ts/options.ts") {
                 let file = fs.readFileSync("./ts/options.ts").toString();
                 file = file.replace(/[ ]+\/\/\/\@ts\-target\:ES6\s+([\s\S]*)\/\/\/\@ts\-target\:ES6/gm, "");
                 return ts.createSourceFile(filename, file, ts.ScriptTarget.ES5, true);
@@ -155,7 +155,7 @@ function compileTS(){
         let program = ts.createProgram(config.fileNames, config.options, host);
         let emitResult = program.emit();
         report(ts.getPreEmitDiagnostics(program).concat(emitResult.diagnostics));
-        if(emitResult.emitSkipped){
+        if(emitResult.emitSkipped) {
             process.exit(1);
         }
     }(config));
@@ -163,9 +163,9 @@ function compileTS(){
     // ES6 JavaScript
     config.options.target = 2;
     config.options.outFile = "../dist/js/tail.select-es6.js";
-    (function(config){
+    (function(config) {
         host.getSourceFile = function(filename) {
-            if(filename === "ts/options.ts"){
+            if(filename === "ts/options.ts") {
                 let file = fs.readFileSync("./ts/options.ts").toString();
                 file = file.replace(/[ ]+\/\/\/\@ts\-target\:ES5\s+([\s\S]*)\/\/\/\@ts\-target\:ES5/gm, "");
                 return ts.createSourceFile(filename, file, ts.ScriptTarget.ES2015, true);
@@ -175,7 +175,7 @@ function compileTS(){
         let program = ts.createProgram(config.fileNames, config.options, host);
         let emitResult = program.emit();
         report(ts.getPreEmitDiagnostics(program).concat(emitResult.diagnostics));
-        if(emitResult.emitSkipped){
+        if(emitResult.emitSkipped) {
             process.exit(1);
         }
     }(config));
@@ -184,7 +184,7 @@ function compileTS(){
 /*
  |  TYPESCRIPT :: HANDLER
  */
-function handleTS(file){
+function handleTS(file) {
     let realpath = "./js/";
     let realfile = file.split("/").pop();
     let filename = realfile.split(".js").shift();
@@ -192,7 +192,7 @@ function handleTS(file){
 
     // Read File
     fs.readFile(file, "utf-8", (err, data) => {
-        if(err){
+        if(err) {
             console.log(err);
             process.exit(1);
         }
@@ -206,10 +206,10 @@ function handleTS(file){
         // Prepare Content
         content = cheader.replace("{path}", realpath).replace("{file}", realfile)
                 + "\n" + content.replace("{code}", code.map((l) => { 
-                    if(/(^|(    )+)\/(\/|\*)/.test(l)){
+                    if(/(^|(    )+)\/(\/|\*)/.test(l)) {
                         return "\n    " + l;
                     }
-                    if(/(^|\s+)\S+\/\//.test(l)){
+                    if(/(^|\s+)\S+\/\//.test(l)) {
                         l = l.split("//")[0];
                     }
                     return (l == "//" || l == "//\r")? "": "    " + l; 
@@ -234,10 +234,10 @@ function handleTS(file){
             toplevel: false,
             warnings: true
         });
-        if(result.error){
+        if(result.error) {
             console.log(result.error);
         }
-        if(result.warnings){
+        if(result.warnings) {
             console.log(result.warnings);
         }
 
@@ -249,19 +249,19 @@ function handleTS(file){
 
         // Write Files
         fs.writeFile(`../dist/js/${filename}.js`, content, "utf-8", (err) => {
-            if(err){
+            if(err) {
                 console.log(err);
                 process.exit(1);
             }
         });
         fs.writeFile(`../dist/js/${filename}.min.js`, minified, "utf-8", (err) => {
-            if(err){
+            if(err) {
                 console.log(err);
                 process.exit(1);
             }
         });
         fs.writeFile(`../dist/js/${filename}.min.js.map`, minifiedmap, "utf-8", (err) => {
-            if(err){
+            if(err) {
                 console.log(err);
                 process.exit(1);
             }
@@ -277,23 +277,85 @@ function handleTS(file){
 /*
  |  LESS :: COMPILER
  */
-function compileLess(){
+function compileLess() {
     //@pass;
 }
 
 /*
  |  LESS :: HANDLE FILES
  */
-function handleLess(){
+function handleLess() {
     //@pass;
 }
+
+
+//
+//  LANGUGE RENDERING
+//
+
+/*
+ |  LANGS :: COMPILER
+ */
+function compileLangs() {
+    //@pass;
+}
+
+
+//
+//  CL-SCRIPT HANDLING
+//
 
 /*
  |  MAIN SCRIPT
  */
-function main(){
-    compileTS();
-    handleTS("../dist/js/tail.select.js");
-    handleTS("../dist/js/tail.select-es6.js");
+function main(ts, less, langs) {
+    if(ts) {
+        compileTS();
+        handleTS("../dist/js/tail.select.js");
+        handleTS("../dist/js/tail.select-es6.js");
+    }
+    if(less) {
+        compileLess();
+        
+    }
+    if(langs) {
+        compileLangs();
+
+    }
 }
-main();
+
+// Handle --help / -h
+if(process.argv.length === 3) {
+    if(process.argv[2] === "-h" || process.argv[2] === "--help") {
+        console.log("");
+        console.log("node index.js <args>|<method>");
+        console.log("");
+        console.log("Methods");
+        console.log("    --help / -h                   Showing this help screen.");
+        console.log("");
+        console.log("Arguments");
+        console.log("    --render-less       / -less   true / false :: Compile Less Files       (Default: true)");
+        console.log("    --render-languages  / -langs  true / false :: Compile Language Files   (Default: false)");
+        console.log("    --render-typescript / -ts     true / false :: Compile TypeScript Files (Default: true)");
+        process.exit(1);
+    }
+}
+
+// Handle Parameters
+let args = [true, true, false], arg = null;
+process.argv.slice(2).forEach(function(value) {
+    if(arg !== null && ["true", "false", "0", "1"].indexOf(value) >= 0) {
+        args[arg] = (value === "true" || value === "1");
+    }
+
+    if(value === "--render-typescript" || value === "-ts") {
+        arg = 0;
+    } else if(value === "--render-less" || value === "-less") {
+        arg = 1;
+    } else if(value === "--render-languages" || value === "-langs") {
+        arg = 2;
+    } else {
+        arg = null;
+    }
+});
+main.apply(this, args);
